@@ -6,18 +6,17 @@ const App = () => {
 
   useEffect(() => {
     // Send an HTTP GET request to your Go backend's HTTP endpoint
-    fetch("http://your-go-backend-url:8080/")
+    fetch("http://your-backend-url.com/getStatus")
       .then((response) => response.json())
       .then((data) => {
-        console.log("Received HTTP response:", data);
-        // Extract the boolean value from the response data
+        // The boolean value is stored in the "Status" key of the JSON object returned by the server
+        const isStatusOk = data.Status;
+        console.log(`Status: ${isStatusOk}`);
         const newValue = data.value;
         // Update the state with the new value
         setValue(newValue);
       })
-      .catch((error) => {
-        console.error("Failed to fetch boolean value:", error);
-      });
+      .catch((error) => console.error(error));
   }, []);
 
   return (
