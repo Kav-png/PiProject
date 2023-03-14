@@ -5,20 +5,20 @@ const App = () => {
   const [value, setValue] = useState(false);
 
   useEffect(() => {
-    // Send an HTTP GET request to your Go backend's HTTP endpoint
-    fetch("http://your-backend-url.com/getStatus")
-      .then((response) => response.json())
-      .then((data) => {
-        // The boolean value is stored in the "Status" key of the JSON object returned by the server
-        const isStatusOk = data.Status;
-        console.log(`Status: ${isStatusOk}`);
-        const newValue = data.value;
-        // Update the state with the new value
-        setValue(newValue);
-      })
-      .catch((error) => console.error(error));
-  }, []);
+    const fetchData = async () => {
+      try {
+        const response = await fetch("YOUR_IP_ADDRESS_OF_PI");
+        const data = await response.json();
+        setValue(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
+    const intervalId = setInterval(fetchData, 5000);
+
+    return () => clearInterval(intervalId);
+  }, []);
   return (
     <View style={styles.container}>
       <Text>The value is: {value ? "true" : "false"}</Text>
